@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Places</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body class="bg-pink-50 min-h-screen flex flex-col">
+  <header class="bg-pink-200 font-serif text-3xl text-center">
+    <img src="img/logo-alt.png" alt="Library Logo" class="mx-auto mb-2 w-20 h-10 object-contain" />
+    <h1 class="text-3xl font-bold mb-2">Library Management System</h1>
+    <nav class="bg-pink-300">
+      <div class="flex flex-col md:flex-row items-center justify-center px-4">
+        <ul class="flex flex-col md:flex-row md:space-x-8 list-none m-0 p-0 justify-center text-center">
+          <li>
+            <a href="index.html#home" class="flex items-center gap-2 hover:text-white-500 rounded transition px-2 py-3">
+              <i class="fas fa-home"></i> Home
+            </a>
+          </li>
+          <li>
+            <a href="places.html" class="flex items-center gap-2 hover:text-white-500 rounded transition px-6 py-3">
+              <i class="fas fa-map-marker-alt"></i> Places
+            </a>
+          </li>
+          <li>
+            <a href="index.html#gallery" class="flex items-center gap-2 hover:text-white-500 rounded transition px-6 py-3">
+              <i class="fas fa-images"></i> Gallery
+            </a>
+          </li>
+          <li>
+            <a href="contact.html" class="flex items-center gap-2 hover:text-white-500 rounded transition px-6 py-3">
+              <i class="fas fa-envelope"></i> Contact
+            </a>
+          </li>
+          <li>
+            <a href="login.html" class="flex items-center gap-2 hover:text-white-500 rounded transition px-6 py-3">
+              <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-grow">
+    <section class="my-8 flex flex-col items-center">
+      <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.418 0-8-4.03-8-9a8 8 0 1116 0c0 4.97-3.582 9-8 9z"/>
+          <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+        </svg>
+        Your Location
+      </h3>
+      <div id="geo-info" class="mb-4 text-center text-gray-700"></div>
+      <div id="map" class="w-full max-w-xl h-64 rounded shadow-lg"></div>
+    </section>
+  </main>
+
+  <footer class="bg-pink-200 py-4 text-center text-gray-700 mt-8">
+    &copy; 2025 Library Management System
+  </footer>
+
+  <script>
+    function showMap(lat, lon) {
+      var map = L.map('map').setView([lat, lon], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+      L.marker([lat, lon]).addTo(map)
+        .bindPopup('You are here!')
+        .openPopup();
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          document.getElementById('geo-info').textContent =
+            `Latitude: ${lat.toFixed(4)}, Longitude: ${lon.toFixed(4)}`;
+          showMap(lat, lon);
+        },
+        function() {
+          document.getElementById('geo-info').textContent =
+            "Unable to retrieve your location.";
+        }
+      );
+    } else {
+      document.getElementById('geo-info').textContent =
+        "Geolocation is not supported by your browser.";
+    }
+  </script>
+</body>
+</html>
